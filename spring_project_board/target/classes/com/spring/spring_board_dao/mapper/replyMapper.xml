@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.spring_project_board_dao.RDAO">
+	<select id="selectArticleList" resultType="com.spring.spring_project_board_vo.ReplyBean" parameterType="int">
+		select * from reply
+		where BOARD_NUM =#{BOARD_NUM}
+		order by RE_NUM desc
+	</select>
+	
+	<update id="updateArticle" parameterType="com.spring.spring_project_board_vo.ReplyBean">
+		update reply set REPLYCONTENT =#{REPLYCONTENT}, RE_DATE =now()
+		where RE_NUM = #{RE_NUM}
+	</update>
+	
+	<delete id="deleteArticle" parameterType="com.spring.spring_project_board_vo.ReplyBean">
+		delete from reply where RE_NUM = #{RE_NUM}
+	</delete>
+	
+	<insert id="insertArticle" parameterType="com.spring.spring_project_board_vo.ReplyBean">
+		insert into reply (BOARD_NUM,REPLYCONTENT,REPLYER)
+		values(#{BOARD_NUM},#{REPLYCONTENT},#{REPLYER})
+	</insert>
+	
+	<select id="reListPage" resultType="com.spring.spring_project_board_vo.ReplyBean">
+		select * from reply
+		where BOARD_NUM =#{board_num}
+		order by RE_NUM desc
+		limit #{pageCriteria.startNum}, #{pageCriteria.numPerPage}
+	</select>
+	
+	<select id="reCount" resultType="int">
+		select count(board_num) from reply where board_num =#{BOARD_NUM}
+	</select>
+	
+</mapper>

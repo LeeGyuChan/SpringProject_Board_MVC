@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.spring_project_board_dao.BDAO">
+	
+	<select id="selectListCount" resultType="java.lang.Integer">
+	select count(*) from tboard
+	</select>
+	
+	<select id="selectArticleList" resultType="com.spring.spring_project_board_vo.BoardBean"
+	 parameterType="int">
+		select * from tboard order by BOARD_RE_REF desc, BOARD_RE_SEQ asc limit #{param1},10
+	</select>
+	
+	<select id="selectArticle" resultType="com.spring.spring_project_board_vo.BoardBean"
+	parameterType="int">
+		select * from tboard where BOARD_NUM=#{param1}
+	</select>
+	
+	<update id="updateArticle" 
+	parameterType="com.spring.spring_project_board_vo.BoardBean">
+		update tboard set BOARD_SUBJECT=#{BOARD_SUBJECT},BOARD_CONTENT=#{BOARD_CONTENT} where BOARD_NUM=#{BOARD_NUM}
+	</update>
+	
+	<delete id="deleteArticle"
+	parameterType="com.spring.spring_project_board_vo.BoardBean">
+		delete from tboard where BOARD_RE_REF=#{BOARD_RE_REF} and BOARD_RE_LEV>=#{BOARD_RE_LEV}
+	</delete>
+	
+	<insert id="insertArticle" parameterType="com.spring.spring_project_board_vo.BoardBean">
+	
+	 <selectKey keyProperty="BOARD_NUM" resultType="int" order="BEFORE">
+	 	select max(board_num)+1 from tboard
+	 </selectKey>	
+		insert into tboard (BOARD_NUM,BOARD_NAME,BOARD_PASS,BOARD_SUBJECT,
+		BOARD_CONTENT,BOARD_FILE,BOARD_RE_REF,BOARD_RE_LEV,BOARD_RE_SEQ,BOARD_READCOUNT,
+		BOARD_DATE) values(#{BOARD_NUM},#{BOARD_NAME},#{BOARD_PASS},#{BOARD_SUBJECT},#{BOARD_CONTENT},#{BOARD_FILE},#{BOARD_NUM},0,0,0,now())
+	</insert>
+	
+</mapper>
