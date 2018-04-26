@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<security:http auto-config="true">
+		<security:form-login
+			login-page="/login"
+			login-processing-url="/processLogin"
+			authentication-failure-url="/login"
+			username-parameter="paramLoginId"
+			password-parameter="paramPassword"/>
+			
+		<security:logout
+			logout-url="/logout"
+			logout-success-url="/home"
+			invalidate-session="true"/>	
+			
+		<security:intercept-url pattern="/boardWriteForm" access="hasAuthority('ROLE_USER')"/>
+		<security:csrf disabled="true"/>
+	</security:http>
+	
+	<security:authentication-manager>
+		<security:authentication-provider>
+			<security:user-service>
+				<security:user name="guest" password="guest" authorities="ROLE_USER"/>
+				<security:user name="admin" password="1234" authorities="ROLE_ADMIN, ROLE_USER"/>
+			</security:user-service>
+		</security:authentication-provider>
+	</security:authentication-manager>
+</beans>
